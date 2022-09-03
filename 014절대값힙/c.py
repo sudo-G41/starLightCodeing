@@ -16,7 +16,7 @@ class BST:
     def push(self, val)->None:
         def _push(node, val, abs):
             if(node.abs == abs):
-                if(node.val<val):
+                if(node.val>val):
                     if node.left:
                         _push(node.left, val, abs)
                     else:
@@ -26,20 +26,21 @@ class BST:
                         _push(node.right, val, abs)
                     else:
                         node.right = Node(val)
-            elif(node.abs < abs):
+            elif(node.abs > abs):
                 if node.left:
-                    _push(node.left, val)
+                    _push(node.left, val, abs)
                 else:
                     node.left = Node(val)
             else:
                 if node.right:
-                    _push(node.right, val)
+                    _push(node.right, val, abs)
                 else:
                     node.right = Node(val)
 
         if(not self.root):
             self.root = Node(val)
-        _push(self.root, val, val if val>0 else -val)
+        else:
+            _push(self.root, val, val if val>0 else -val)
 
     def pop(self)->int:
         if(not self.root):
@@ -60,24 +61,28 @@ class BST:
             if(node.left):
                 _print(node.left)
                 print(", ",end="")
+
             print(f"{node.val}",end="")
+
             if(node.right):
                 print(", ",end="")
                 _print(node.right)
         print("[",end="")
-        _print(self.root)
+        if(self.root):
+            _print(self.root)
         print("]")
-
 
 def solution():
     bst = BST()
+    # bst.print()
     for _ in range(int(input())):
         x = int(int(input()))
+        # print(f"x:{x}")
         if(x == 0):
-            print(bst.pop())
+            print(f"{bst.pop()}")
         else:
             bst.push(x)
-        bst.print()
+        # bst.print()
 
 if(__name__ == "__main__"):
 	solution()
