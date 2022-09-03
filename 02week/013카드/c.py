@@ -32,6 +32,7 @@ class MyDeck:
             self.top.next = None
             self.size -= 1
             return True
+        ########아주 약간의 성능 향상을 위해....########
         elif(self.size == 2):
             self.front = self.top
             self.top.next = None
@@ -40,8 +41,48 @@ class MyDeck:
 
         self.front = None
         self.top = None
-        self.size = 0
         return False
+
+    def print(self) -> None:
+        node = self.front
+        print("[",end="")
+        while(True):
+            print(F"{node.val}",end="")
+            if(node.next):
+                print(F",",end="")
+                node = node.next
+            else:
+                break
+        print("]")
+
+class NewDeck:
+    def __init__(self) -> None:
+        self.front = None
+        self.top = None
+    
+    def push(self, val:int) -> None:
+        if(self.top):
+            self.top.next = Node(val)
+            self.top = self.top.next
+        else:
+            self.front = self.top = Node(val)
+
+    def pop(self) -> bool:
+        if(self.front.next != self.top):
+            self.top.next, self.top, self.front = self.front.next, self.front.next, self.front.next.next
+            self.top.next = None
+            return True
+        elif(self.front != self.top):
+            self.front = self.top
+            self.top.next = None
+            return True
+        elif(self.front):
+            self.front = None
+            self.top = None
+        return False
+
+    def empty(self):
+        return bool(self.front)
 
     def print(self) -> None:
         node = self.front
@@ -71,7 +112,17 @@ def solution2(deck):
         my_deck.pop()
     return my_deck.front.val
 
+def solution3(deck):
+    new_deck = NewDeck()
+    for card in deck:
+        new_deck.push(card)
+    while(new_deck.front != new_deck.top):
+        new_deck.pop()
+    
+    return new_deck.front.val
+
 if(__name__ == "__main__"):
     deck = [i for i in range(1,int(input())+1)]
     print(f"solution1 : {solution(deck)}")
     print(f"solution2 : {solution2(deck)}")
+    print(f"solution3 : {solution3(deck)}")
